@@ -140,7 +140,6 @@ open1000x/
 │   ├── build-app.sh            # builds and signs the .app
 │   └── make-signing-cert.sh    # one-time self-signed identity for release builds
 ├── packaging/homebrew/         # cask template, published to gergogyulai/homebrew-tap on release
-├── research/                   # the original Python/Bun protocol research
 └── site/                       # product site (Astro)
 ```
 
