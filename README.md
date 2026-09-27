@@ -27,6 +27,31 @@ Open1000X is a native macOS menu bar app for Sony 1000X headphones. It replaces 
 
 Developed and tested against a **WH-1000XM5 (firmware 2.4.1)** on macOS 27. Other MDR v2 headsets (WH-1000XM6, WF-1000XM5, LinkBuds…) should mostly work, but they are untested.
 
+## Feature parity with Sound Connect
+
+| | Feature | What's covered | Status |
+|---|---|---|---|
+| 01 | noise control | Noise Cancelling / Ambient Sound / Off, ambient level 1–20, Focus on Voice | ● verified |
+| 02 | equalizer | Presets, custom 5 bands + Clear Bass, Punch and Clarity | ● verified |
+| 03 | dsee extreme | On/off, and whether it's active right now | ● verified |
+| 04 | speak-to-chat | On/off, sensitivity, end timer | ● verified |
+| 05 | buttons & touch | NC/AMB button cycle, touch sensor control panel (prompt flow only, change declined), headset confirmation prompts | ● verified |
+| 06 | playback | Volume, play/pause/next/previous, now playing | ○ implemented |
+| 07 | multipoint | Multipoint on/off, paired device list, switch audio source, connect/disconnect/unpair, pairing mode, auto source switch | ○ implemented |
+| 08 | quick access | Double/triple tap, voice assistant selection | ○ implemented |
+| 09 | system | Auto power off, pause when taken off, voice guidance and language, connection quality (sound vs. stable), sound pressure, power off, reset settings, factory reset | ○ implemented |
+
+Battery, charging state and codec are read-only and always shown.
+
+### Don't expect
+
+Some of Sound Connect runs on the phone or on Sony's servers, not in the headset. Those parts aren't here, at least for now.
+
+- **Adaptive Sound Control.** Sound Connect uses the phone's motion and location sensors to decide *when* to push settings. The headset side (`SENSE` commands) is documented in `Protocol.swift`. A Mac version would need its own triggers, such as Wi-Fi network or Focus mode.
+- **Firmware updates.** These need Sony's update servers and a proprietary transfer protocol, and getting it wrong can brick the headset.
+- **360 Reality Audio, "Find your equalizer", listening history.** These are phone-app services, not headset settings.
+- **Quick Access service names beyond Spotify Tap.** The XM5 offers IDs 2 and 5 too; they are shown by number.
+
 ## Quick Start
 
 You need macOS 26 or later, Xcode 26 (Swift 6.2), and headphones already paired in System Settings → Bluetooth.
@@ -68,37 +93,6 @@ Run `mdrctl` with no arguments for the full command list: noise control, EQ, Spe
 | `OPEN1000X_SNAPSHOT=<dir> build/Open1000X.app/Contents/MacOS/Open1000X` | Screenshots the popover and every settings pane (light + dark), then quits |
 | `DEMO=1 ./scripts/build-app.sh` | Builds a demo variant into `build/demo/` that shows paired devices as "MacBook Pro" and "iPhone 16", for screenshots. The masking is compiled in only for this build |
 | `swift test` | Framing, escaping and parsing tests (no headset needed) |
-
-## Feature parity with Sound Connect
-
-✅ = verified on the XM5 by reading back after a write. ☑️ = implemented, read path verified, write not exercised. The write was held back because it disconnects or re-pairs devices.
-
-| Feature | Status |
-|---|---|
-| Battery, charging state, codec, DSEE activity | ✅ |
-| Noise Cancelling / Ambient Sound / Off, ambient level 1–20, Focus on Voice | ✅ |
-| NC/AMB button cycle | ✅ |
-| Speak-to-Chat on/off, sensitivity, end timer | ✅ |
-| Equalizer presets, custom 5 bands + Clear Bass | ✅ |
-| DSEE Extreme | ✅ |
-| Headset confirmation prompts (e.g. touch panel, multipoint) | ✅ |
-| Touch sensor control panel | ✅ (prompt flow verified, change declined) |
-| Volume, play/pause/next/previous, now playing | ☑️ |
-| Connection quality (sound vs. stable) | ☑️ |
-| Voice assistant selection | ☑️ |
-| Quick Access (double/triple tap) | ☑️ |
-| Pause when taken off, automatic power off | ☑️ |
-| Voice guidance on/off and language | ☑️ |
-| Multipoint on/off, paired device list, switch audio source, connect/disconnect/unpair, pairing mode, auto source switch | ☑️ |
-| Sound pressure (safe listening) | ☑️ |
-| Power off, reset settings, factory reset | ☑️ |
-
-### Not implemented
-
-- **Adaptive Sound Control.** Sound Connect uses the phone's motion and location sensors to decide *when* to push settings. The headset side (`SENSE` commands) is documented in `Protocol.swift`. A Mac version would need its own triggers, such as Wi-Fi network or Focus mode.
-- **Firmware updates.** These need Sony's update servers and a proprietary transfer protocol, and getting it wrong can brick the headset.
-- **360 Reality Audio, "Find your equalizer", listening history.** These are phone-app services, not headset settings.
-- **Quick Access service names beyond Spotify Tap.** The XM5 offers IDs 2 and 5 too; they are shown by number.
 
 ## Project Structure
 
