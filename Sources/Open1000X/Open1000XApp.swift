@@ -11,7 +11,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             manager.trace = { FileHandle.standardError.write(Data(($0 + "\n").utf8)) }
         }
         manager.start()
-        DebugSnapshots.runIfRequested(manager)
     }
 }
 

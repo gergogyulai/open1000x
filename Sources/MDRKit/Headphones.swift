@@ -645,10 +645,7 @@ public final class Headphones {
                 let addr = try r.ascii(17)
                 let status = try r.u8()
                 let cod = try r.u24()
-                var name = try r.string()
-                #if OPEN1000X_DEMO
-                name = DemoMode.deviceName(for: cod)
-                #endif
+                let name = try r.string()
                 raw.append((addr, status, cod, name))
             }
             let playing = (try? r.u8()) ?? 0

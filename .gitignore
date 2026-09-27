@@ -1,6 +1,5 @@
 # Swift
 .build/
-.build-demo/
 .swiftpm/
 build/
 

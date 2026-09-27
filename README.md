@@ -117,8 +117,6 @@ Run `mdrctl` with no arguments for the full command list: noise control, EQ, Spe
 |---|---|
 | `mdrctl --trace <command>` | Prints every frame sent and received |
 | `OPEN1000X_TRACE=1 build/Open1000X.app/Contents/MacOS/Open1000X` | Same, for the app |
-| `OPEN1000X_SNAPSHOT=<dir> build/Open1000X.app/Contents/MacOS/Open1000X` | Screenshots the popover and every settings pane (light + dark), then quits |
-| `DEMO=1 ./scripts/build-app.sh` | Builds a demo variant into `build/demo/` that shows paired devices as "MacBook Pro" and "iPhone 16", for screenshots. The masking is compiled in only for this build |
 | `swift test` | Framing, escaping and parsing tests (no headset needed) |
 
 ## Project Structure

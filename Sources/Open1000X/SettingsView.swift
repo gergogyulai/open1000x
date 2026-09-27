@@ -33,12 +33,7 @@ struct SettingsView: View {
         }
     }
 
-    @State private var pane: Pane
-
-    init(manager: DeviceManager, pane: Pane = .sound) {
-        self.manager = manager
-        _pane = State(initialValue: pane)
-    }
+    @State private var pane: Pane = .sound
 
     var body: some View {
         Group {
