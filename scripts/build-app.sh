@@ -31,6 +31,10 @@ BIN="$(swift build "$@" --show-bin-path)"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/Open1000X" "$BIN/mdrctl" "$APP/Contents/MacOS/"
+# open1000x.icon is an Icon Composer document. actool turns it into Assets.car (Liquid Glass) plus an .icns fallback.
+xcrun actool open1000x.icon --compile "$APP/Contents/Resources" --app-icon open1000x \
+    --platform macosx --minimum-deployment-target 26.0 \
+    --output-partial-info-plist "$(mktemp -d)/icon.plist" > /dev/null
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -42,6 +46,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleDisplayName</key><string>Open1000X</string>
     <key>CFBundleExecutable</key><string>Open1000X</string>
     <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleIconFile</key><string>open1000x</string>
+    <key>CFBundleIconName</key><string>open1000x</string>
     <key>CFBundleShortVersionString</key><string>$VERSION</string>
     <key>CFBundleVersion</key><string>$VERSION</string>
     <key>LSMinimumSystemVersion</key><string>26.0</string>

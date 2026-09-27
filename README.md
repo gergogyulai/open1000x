@@ -2,6 +2,7 @@
 
 <div align="center">
   <br>
+  <img src="assets/icon.png" alt="Open1000X icon" width="128" height="128">
   <h1>Open1000X</h1>
   <sub>Sound Connect for the Mac, minus the phone</sub>
   <br>
