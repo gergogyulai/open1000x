@@ -29,17 +29,17 @@ Developed and tested against a **WH-1000XM5 (firmware 2.4.1)** on macOS 27. Othe
 
 ## Feature parity with Sound Connect
 
-| | Feature | What's covered | Status |
-|---|---|---|---|
-| 01 | noise control | Noise Cancelling / Ambient Sound / Off, ambient level 1–20, Focus on Voice | ● verified |
-| 02 | equalizer | Presets, custom 5 bands + Clear Bass, Punch and Clarity | ● verified |
-| 03 | dsee extreme | On/off, and whether it's active right now | ● verified |
-| 04 | speak-to-chat | On/off, sensitivity, end timer | ● verified |
-| 05 | buttons & touch | NC/AMB button cycle, touch sensor control panel (prompt flow only, change declined), headset confirmation prompts | ● verified |
-| 06 | playback | Volume, play/pause/next/previous, now playing | ○ implemented |
-| 07 | multipoint | Multipoint on/off, paired device list, switch audio source, connect/disconnect/unpair, pairing mode, auto source switch | ○ implemented |
-| 08 | quick access | Double/triple tap, voice assistant selection | ○ implemented |
-| 09 | system | Auto power off, pause when taken off, voice guidance and language, connection quality (sound vs. stable), sound pressure, power off, reset settings, factory reset | ○ implemented |
+| Feature | What's covered | Status |
+|---|---|---|
+| noise control | Noise Cancelling / Ambient Sound / Off, ambient level 1–20, Focus on Voice | ● verified |
+| equalizer | Presets, custom 5 bands + Clear Bass, Punch and Clarity | ● verified |
+| dsee extreme | On/off, and whether it's active right now | ● verified |
+| speak-to-chat | On/off, sensitivity, end timer | ● verified |
+| buttons & touch | NC/AMB button cycle, touch sensor control panel (prompt flow only, change declined), headset confirmation prompts | ● verified |
+| playback | Volume, play/pause/next/previous, now playing | ○ implemented |
+| multipoint | Multipoint on/off, paired device list, switch audio source, connect/disconnect/unpair, pairing mode, auto source switch | ○ implemented |
+| quick access | Double/triple tap, voice assistant selection | ○ implemented |
+| system | Auto power off, pause when taken off, voice guidance and language, connection quality (sound vs. stable), sound pressure, power off, reset settings, factory reset | ○ implemented |
 
 Battery, charging state and codec are read-only and always shown.
 
