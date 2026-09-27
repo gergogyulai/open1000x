@@ -52,18 +52,44 @@ Some of Sound Connect runs on the phone or on Sony's servers, not in the headset
 - **360 Reality Audio, "Find your equalizer", listening history.** These are phone-app services, not headset settings.
 - **Quick Access service names beyond Spotify Tap.** The XM5 offers IDs 2 and 5 too; they are shown by number.
 
-## Quick Start
+## Install
 
-You need macOS 26 or later, Xcode 26 (Swift 6.2), and headphones already paired in System Settings → Bluetooth.
+You need macOS 26 or later and headphones already paired in System Settings → Bluetooth.
+
+```sh
+brew install gergogyulai/tap/open1000x
+```
+
+This installs the app and puts `mdrctl` on your PATH. macOS asks for Bluetooth access on first launch.
+
+<details>
+<summary>Without Homebrew</summary>
+
+Download the zip from the [latest release](https://github.com/gergogyulai/open1000x/releases/latest), unzip it and move Open1000X.app to Applications.
+
+Open1000X isn't notarized, because that needs a paid Apple developer account. The first launch is blocked with a warning that Apple can't check the app for malware. To allow it, open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. Right-click → Open no longer does this on recent macOS. You can also clear the flag from a terminal:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Open1000X.app
+```
+
+`mdrctl` is inside the app, at `Open1000X.app/Contents/MacOS/mdrctl`.
+</details>
+
+It lives in the menu bar only, with no Dock icon. **Headphone Settings…** (⌘,) opens the full settings window.
+
+### Build from source
+
+You need Xcode 26 (Swift 6.2).
 
 ```sh
 git clone https://github.com/gergogyulai/open1000x.git
 cd open1000x
 ./scripts/build-app.sh          # → build/Open1000X.app (ad-hoc signed)
-open build/Open1000X.app        # macOS asks for Bluetooth access on first launch
+open build/Open1000X.app
 ```
 
-It lives in the menu bar only, with no Dock icon. **Headphone Settings…** (⌘,) opens the full settings window.
+`UNIVERSAL=1` builds for Intel too. `SIGN_IDENTITY="<name>"` signs with a keychain identity instead of ad-hoc.
 
 ## CLI
 
@@ -109,10 +135,17 @@ open1000x/
 │   ├── Open1000X/              # SwiftUI menu bar popover and settings window
 │   └── mdrctl/                 # command-line client
 ├── Tests/                      # MDRKit tests
-├── scripts/build-app.sh        # builds and ad-hoc signs the .app
+├── scripts/
+│   ├── build-app.sh            # builds and signs the .app
+│   └── make-signing-cert.sh    # one-time self-signed identity for release builds
+├── packaging/homebrew/         # cask template, published to gergogyulai/homebrew-tap on release
 ├── research/                   # the original Python/Bun protocol research
 └── site/                       # product site (Astro)
 ```
+
+## Releasing
+
+Push a `v*` tag. [`release.yml`](.github/workflows/release.yml) runs the tests, builds a universal app, publishes a GitHub release and updates the cask in [gergogyulai/homebrew-tap](https://github.com/gergogyulai/homebrew-tap). It uses the `SIGNING_CERT_P12`/`SIGNING_CERT_PASSWORD` secrets from `scripts/make-signing-cert.sh`, so every release keeps the same signing identity and users don't have to grant Bluetooth access again after an update. It also needs a `TAP_TOKEN` secret with write access to the tap.
 
 ## Contribute
 

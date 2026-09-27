@@ -11,3 +11,6 @@ research/bun/rfcomm-bridge
 
 # macOS
 .DS_Store
+
+# release signing identity (scripts/make-signing-cert.sh)
+signing/

@@ -80,7 +80,7 @@ const not = [
           Sony's own protocol. No phone, no account, no cloud.
         </p>
         <nav class="links in" style={line()}>
-          <a href="#build">build it</a>
+          <a href="#build">install</a>
           <a href={repo}>read the source</a>
         </nav>
         <dl class="meta in" style={line()}>
@@ -193,21 +193,20 @@ const not = [
     </section>
 
     <section id="build" class="band wrap reveal">
-      <p class="label"><b>03</b> build it</p>
-      <h2>No signed release yet. Build it yourself.</h2>
+      <p class="label"><b>03</b> install it</p>
+      <h2>One command, no Apple account.</h2>
       <p class="sub">
-        You need macOS 26, Xcode 26 and your headphones already paired in
-        System Settings.
+        You need macOS 26 and your headphones already paired in System
+        Settings.
       </p>
 
       <div class="build">
-        <pre><span class="p">$</span> git clone {repo}
-<span class="p">$</span> cd open1000x
-<span class="p">$</span> ./scripts/build-app.sh
-<span class="p">$</span> open build/Open1000X.app</pre>
+        <pre><span class="p">$</span> brew install gergogyulai/tap/open1000x</pre>
         <p class="note">
-          Ad-hoc signed, menu bar only. macOS asks for Bluetooth access on first
-          launch.
+          Menu bar only, and <code>mdrctl</code> lands on your PATH. macOS asks
+          for Bluetooth access on first launch. Not notarized: without Homebrew,
+          grab the zip from <a href={`${repo}/releases/latest`}>releases</a>
+          and allow it once under Privacy &amp; Security → Open Anyway.
         </p>
       </div>
     </section>
