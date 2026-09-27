@@ -1,0 +1,598 @@
+:root {
+  --paper: #f4f1ea;
+  --ink: #1f1d1a;
+  --faint: #6f6a61;
+  --rule: #d9d4c9;
+  --well: #ebe7dd;
+  /* the pairing LED: the one loud color on the page */
+  --signal: #d9431e;
+  --grain: 0.07;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --wide: "Archivo Variable", "Helvetica Neue", sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121110;
+    --ink: #d8d3c8;
+    --faint: #8f897e;
+    --rule: #2a2825;
+    --well: #1a1917;
+    --signal: #ff6a3d;
+    --grain: 0.05;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--paper);
+  min-height: 100svh;
+}
+
+/* paper grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.wrap {
+  /* inset with margins, not padding, so rules line up with the text */
+  width: min(68rem, 100% - 3rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline 1px var(--rule);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 0.2s;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration-color: currentColor;
+  outline: none;
+}
+
+code {
+  font: inherit;
+}
+
+.faint {
+  color: var(--faint);
+}
+
+/* [bracketed] links; inline-block keeps the underline off the brackets */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ch 3ch;
+}
+
+.links a::before,
+.links a::after {
+  display: inline-block;
+  color: var(--faint);
+  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1), color 0.2s;
+}
+
+.links a::before {
+  content: "[";
+}
+
+.links a::after {
+  content: "]";
+}
+
+.links a:hover::before,
+.links a:focus-visible::before {
+  transform: translateX(-3px);
+  color: var(--signal);
+}
+
+.links a:hover::after,
+.links a:focus-visible::after {
+  transform: translateX(3px);
+  color: var(--signal);
+}
+
+/* ---------- top bar ---------- */
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2ch;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.bar strong {
+  font-weight: 500;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4rem;
+  align-items: center;
+  padding-top: 5rem;
+  padding-bottom: 6rem;
+}
+
+.mark {
+  font-family: var(--wide);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(3.4rem, 10vw, 7.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  margin-bottom: 2rem;
+}
+
+.mark span {
+  color: var(--signal);
+}
+
+.lede {
+  font-family: var(--wide);
+  font-stretch: 112%;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  max-width: 24ch;
+  margin-bottom: 1.5rem;
+}
+
+.intro {
+  max-width: 46ch;
+  margin-bottom: 2rem;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.1rem 3ch;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  max-width: 46ch;
+}
+
+.meta dt {
+  color: var(--faint);
+}
+
+/* the popover with manual-style callouts */
+.device {
+  position: relative;
+  display: grid;
+  grid-template-columns: 340px 15ch;
+}
+
+.device img {
+  display: block;
+  width: 340px;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.35);
+}
+
+.callouts {
+  list-style: none;
+  position: relative;
+}
+
+.callouts li {
+  position: absolute;
+  left: 2.25rem;
+  transform: translateY(-50%);
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* leader line reaching back into the screenshot, ending in a dot */
+.callouts li::before {
+  content: "";
+  position: absolute;
+  right: calc(100% + 0.75rem);
+  top: 50%;
+  width: var(--reach, 3rem);
+  border-top: 1px solid var(--faint);
+}
+
+.callouts li::after {
+  content: "";
+  position: absolute;
+  right: calc(100% + 0.75rem + var(--reach, 3rem));
+  top: calc(50% - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+
+/* ---------- sections ---------- */
+
+section.band {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.25rem;
+  padding-bottom: 6rem;
+}
+
+.label {
+  display: flex;
+  gap: 2ch;
+  color: var(--faint);
+  margin-bottom: 3rem;
+}
+
+.label b {
+  font-weight: 400;
+  color: var(--signal);
+}
+
+h2 {
+  font-family: var(--wide);
+  font-stretch: 118%;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  max-width: 22ch;
+  margin-bottom: 1.25rem;
+}
+
+.sub {
+  max-width: 58ch;
+  color: var(--faint);
+}
+
+/* ---------- the wire ---------- */
+
+.frame {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem 1.6ch;
+  margin: 3.5rem 0 2rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bytes {
+  display: flex;
+  gap: 1ch;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+  font-weight: 500;
+  line-height: 1;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--faint);
+}
+
+.marker .bytes {
+  color: var(--faint);
+}
+
+/* each byte flashes as it goes out, left to right, then the frame goes again */
+.bytes span {
+  animation: tx 5s linear infinite;
+  animation-delay: calc(var(--b) * 110ms + 600ms);
+}
+
+@keyframes tx {
+  0% {
+    color: var(--signal);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--signal) 50%, transparent);
+  }
+  5% {
+    color: inherit;
+    text-shadow: none;
+  }
+}
+
+.group small {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--faint);
+  max-width: 24ch;
+}
+
+.decode {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.25rem 3ch;
+  max-width: 58rem;
+}
+
+.decode li {
+  display: flex;
+  gap: 1.5ch;
+  color: var(--faint);
+}
+
+.decode code {
+  color: var(--ink);
+}
+
+/* ---------- spec sheet ---------- */
+
+.specs {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 3rem;
+}
+
+.specs li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--paper);
+  padding: 1.25rem 1.25rem 1rem;
+  min-height: 11rem;
+  transition: background 0.25s;
+}
+
+.specs li:hover {
+  background: var(--well);
+}
+
+.specs .n {
+  color: var(--faint);
+  font-size: 12px;
+}
+
+.specs h3 {
+  font-family: var(--wide);
+  font-stretch: 110%;
+  font-weight: 650;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-top: 0.75rem;
+}
+
+.specs p {
+  color: var(--faint);
+}
+
+.specs .state {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--signal);
+  margin-right: 1ch;
+  vertical-align: 0.05em;
+}
+
+.dot.on {
+  background: var(--signal);
+}
+
+.not-title {
+  font-family: var(--wide);
+  font-stretch: 110%;
+  font-weight: 650;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  margin-top: 4.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.not-sub {
+  max-width: 58ch;
+  color: var(--faint);
+  margin-bottom: 1.25rem;
+}
+
+.not {
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.not li {
+  display: grid;
+  grid-template-columns: 22ch 1fr;
+  gap: 2ch;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.not s {
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 1px;
+}
+
+.not span {
+  color: var(--faint);
+}
+
+/* ---------- build ---------- */
+
+.build {
+  max-width: 40rem;
+  margin-top: 3rem;
+}
+
+pre {
+  background: var(--well);
+  border-radius: 6px;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  font: inherit;
+  line-height: 1.6;
+}
+
+pre .p {
+  color: var(--signal);
+}
+
+.build pre {
+  font-size: 13px;
+}
+
+.build .note {
+  color: var(--faint);
+  margin-top: 0.75rem;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  border-top: 1px solid var(--rule);
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+.sign {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem 3ch;
+  margin-bottom: 2rem;
+}
+
+.word {
+  font-family: var(--wide);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 8ch;
+}
+
+.colophon dt {
+  color: var(--faint);
+  font-size: 12px;
+}
+
+/* ---------- motion ---------- */
+
+/* the hero prints itself in, line by line */
+.in {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 70ms + 120ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(3px);
+  }
+}
+
+/* sections settle in as they scroll into view, where supported */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .in,
+  .reveal,
+  .bytes span {
+    animation: none;
+  }
+
+  .links a::before,
+  .links a::after {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 64rem) {
+  .device {
+    grid-template-columns: 340px;
+  }
+
+  .callouts {
+    display: none;
+  }
+}
+
+@media (max-width: 52rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3.5rem;
+    padding-top: 2rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .device {
+    grid-template-columns: minmax(0, 340px);
+  }
+
+  .device img {
+    width: 100%;
+  }
+
+  .not li {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

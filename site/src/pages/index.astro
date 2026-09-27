@@ -1,0 +1,238 @@
+---
+import Base from "../layouts/Base.astro";
+
+const repo = "https://github.com/gergogyulai/open1000x";
+
+// Every call hands out the next animation slot, top to bottom.
+let n = 0;
+const line = () => `--i: ${n++}`;
+
+// Where each callout points on the 340×552 popover screenshot.
+const callouts = [
+  { y: 35, reach: "1.8rem", text: "battery, read off the headset" },
+  { y: 96, reach: "4.5rem", text: "nc · ambient · off" },
+  { y: 236, reach: "1.8rem", text: "live eq curve" },
+  { y: 319, reach: "1.8rem", text: "now playing, volume" },
+  { y: 430, reach: "1.8rem", text: "multipoint sources" },
+];
+
+// A real frame: ambient sound, level 12, focus on voice.
+// `3e | type seq len:u32be payload checksum | 3c`
+const frame = [
+  { label: "start", bytes: ["3e"], marker: true },
+  { label: "table 1", bytes: ["0c"] },
+  { label: "seq", bytes: ["00"] },
+  { label: "length, 7", bytes: ["00", "00", "00", "07"] },
+  { label: "payload", bytes: ["68", "17", "01", "01", "01", "01", "0c"] },
+  { label: "sum", bytes: ["a2"] },
+  { label: "end", bytes: ["3c"], marker: true },
+];
+let b = 0;
+
+const payload = [
+  ["68", "set noise control"],
+  ["17", "which setting: noise control"],
+  ["01", "commit, not a drag"],
+  ["01", "noise control on"],
+  ["01", "ambient, not nc"],
+  ["01", "focus on voice"],
+  ["0c", "ambient level 12"],
+];
+
+// ● written and read back on a real XM5, ○ implemented, write not exercised.
+const specs = [
+  ["noise control", "nc, ambient 1–20, focus on voice.", true],
+  ["equalizer", "sony's presets, 5 bands + clear bass, and two of its own: punch and clarity.", true],
+  ["dsee extreme", "upscaling for compressed music.", true],
+  ["speak-to-chat", "on/off, sensitivity, end timer.", true],
+  ["buttons & touch", "nc/amb button cycle, touch sensor panel, headset prompts.", true],
+  ["playback", "volume, play/pause/skip, now playing.", false],
+  ["multipoint", "both devices at once, switch source, pair, unpair.", false],
+  ["quick access", "double and triple tap, voice assistant.", false],
+  ["system", "auto power off, pause when taken off, voice guidance, reset.", false],
+] as const;
+
+const not = [
+  ["adaptive sound control", "needs a phone's motion and location sensors."],
+  ["firmware updates", "needs sony's servers, and getting it wrong bricks the headset."],
+  ["360 reality audio", "a phone service, not a headset setting."],
+];
+---
+
+<Base>
+  <div class="bar wrap in" style={line()}>
+    <span><strong>open1000x</strong> <span class="faint">v0.1</span></span>
+    <nav class="links">
+      <a href={repo}>source</a>
+      <a href={`${repo}/issues`}>issues</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero wrap">
+      <div>
+        <h1 class="mark in" style={line()}>open<br />1000<span>x</span></h1>
+        <p class="lede in" style={line()}>
+          Sound Connect for the Mac, minus the phone.
+        </p>
+        <p class="intro in" style={line()}>
+          A menu bar app that talks to your headset directly over Bluetooth, in
+          Sony's own protocol. No phone, no account, no cloud.
+        </p>
+        <nav class="links in" style={line()}>
+          <a href="#build">build it</a>
+          <a href={repo}>read the source</a>
+        </nav>
+        <dl class="meta in" style={line()}>
+          <dt>runs on</dt>
+          <dd>macOS 26+</dd>
+          <dt>tested on</dt>
+          <dd>WH-1000XM5, fw 2.4.1</dd>
+          <dt>talks</dt>
+          <dd>rfcomm, sony mdr v2</dd>
+        </dl>
+      </div>
+
+      <figure class="device in" style={line()}>
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="/menu-dark.png" />
+          <img
+            src="/menu-light.png"
+            width="340"
+            height="552"
+            alt="The open1000x menu bar popover, connected to a WH-1000XM5"
+          />
+        </picture>
+        <ul class="callouts" aria-hidden="true">
+          {
+            callouts.map((c) => (
+              <li style={`top: ${c.y}px; --reach: ${c.reach}`}>{c.text}</li>
+            ))
+          }
+        </ul>
+      </figure>
+    </section>
+
+    <section class="band wrap reveal">
+      <p class="label"><b>01</b> spec sheet</p>
+      <h2>Most of Sound Connect, none of the phone.</h2>
+      <p class="sub">
+        The UI is built from the function list the headset reports, so you only
+        see what your model supports. Other MDR v2 headsets (WH-1000XM6,
+        WF-1000XM5, LinkBuds) should mostly work. Nobody has tried yet. If you
+        do, <a href={`${repo}/issues`}>tell me</a>.
+      </p>
+
+      <ul class="specs">
+        {
+          specs.map(([name, note, verified], i) => (
+            <li>
+              <span class="n">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{name}</h3>
+              <p>{note}</p>
+              <span class="state">
+                <span class:list={["dot", { on: verified }]} />
+                {verified ? "verified" : "implemented"}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="not-title">Don't expect</h3>
+      <p class="not-sub">
+        Some of Sound Connect runs on the phone or on Sony's servers, not in
+        the headset. Those parts aren't here, at least for now.
+      </p>
+      <ul class="not">
+        {
+          not.map(([name, why]) => (
+            <li>
+              <s>{name}</s>
+              <span>{why}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="band wrap reveal">
+      <p class="label"><b>02</b> the wire</p>
+      <h2>Every setting is sixteen bytes or so.</h2>
+      <p class="sub">
+        This is what goes out when you pick Ambient Sound, level 12, with Focus
+        on Voice. Every command is a frame like this over RFCOMM. The app waits
+        for the ack and retransmits if it doesn't come.
+      </p>
+
+      <div class="frame" aria-label="3e 0c 00 00 00 00 07 68 17 01 01 01 01 0c a2 3c">
+        {
+          frame.map((g) => (
+            <div class:list={["group", { marker: g.marker }]}>
+              <span class="bytes">
+                {g.bytes.map((x) => (
+                  <span style={`--b: ${b++}`}>{x}</span>
+                ))}
+              </span>
+              <small>{g.label}</small>
+            </div>
+          ))
+        }
+      </div>
+
+      <ul class="decode">
+        {
+          payload.map(([x, what]) => (
+            <li>
+              <code>{x}</code>
+              {what}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section id="build" class="band wrap reveal">
+      <p class="label"><b>03</b> build it</p>
+      <h2>No signed release yet. Build it yourself.</h2>
+      <p class="sub">
+        You need macOS 26, Xcode 26 and your headphones already paired in
+        System Settings.
+      </p>
+
+      <div class="build">
+        <pre><span class="p">$</span> git clone {repo}
+<span class="p">$</span> cd open1000x
+<span class="p">$</span> ./scripts/build-app.sh
+<span class="p">$</span> open build/Open1000X.app</pre>
+        <p class="note">
+          Ad-hoc signed, menu bar only. macOS asks for Bluetooth access on first
+          launch.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div class="sign">
+      <span class="word">open1000x</span>
+      <nav class="links">
+        <a href={repo}>github</a>
+        <a href={`${repo}/issues`}>issues</a>
+      </nav>
+    </div>
+    <dl class="colophon">
+      <div>
+        <dt>protocol from</dt>
+        <dd>
+          <a href="https://codeberg.org/Freeyourgadget/Gadgetbridge">Gadgetbridge</a>,{" "}
+          <a href="https://github.com/mos9527/SonyHeadphonesClient">SonyHeadphonesClient</a>
+        </dd>
+      </div>
+      <div>
+        <dt>fine print</dt>
+        <dd>not affiliated with sony</dd>
+      </div>
+    </dl>
+  </footer>
+</Base>

@@ -1,0 +1,13 @@
+# Swift
+.build/
+.build-demo/
+.swiftpm/
+build/
+
+# research
+__pycache__/
+venv/
+research/bun/rfcomm-bridge
+
+# macOS
+.DS_Store
