@@ -16,6 +16,7 @@ Open1000X is a native macOS menu bar app for Sony 1000X headphones. It replaces 
 - 🗣️ Speak-to-Chat, DSEE Extreme, NC/AMB button cycle, Quick Access, touch panel
 - 📱 Multipoint: see both connected devices and move audio between them
 - 🔋 Battery and noise mode in the menu bar, opens at login
+- 🎛️ Control Center controls for noise control, Ambient Sound, Speak-to-Chat and DSEE Extreme
 - 🧩 The UI is built from the function list the headset reports, so it only shows what your model supports
 - ⌨️ `mdrctl`, a CLI that does everything the app does (and prints every frame if you ask)
 

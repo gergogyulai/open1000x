@@ -11,8 +11,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "MDRKit", linkerSettings: [.linkedFramework("IOBluetooth")]),
+        // Also compiled into the Control Center extension (Extensions/Controls) by scripts/build-app.sh.
+        .target(name: "ControlBridge"),
         .executableTarget(name: "mdrctl", dependencies: ["MDRKit"]),
-        .executableTarget(name: "Open1000X", dependencies: ["MDRKit"]),
+        .executableTarget(name: "Open1000X", dependencies: ["MDRKit", "ControlBridge"]),
         .testTarget(name: "MDRKitTests", dependencies: ["MDRKit"]),
     ]
 )

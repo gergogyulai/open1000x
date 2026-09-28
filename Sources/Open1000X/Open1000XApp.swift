@@ -5,12 +5,18 @@ import SwiftUI
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let manager = DeviceManager()
+    private var controls: ControlsBridge?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         if ProcessInfo.processInfo.environment["OPEN1000X_TRACE"] != nil {
             manager.trace = { FileHandle.standardError.write(Data(($0 + "\n").utf8)) }
         }
         manager.start()
+        controls = ControlsBridge(manager: manager)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        controls?.appWillTerminate()
     }
 }
 
