@@ -141,10 +141,6 @@ open1000x/
 └── site/                       # product site (Astro)
 ```
 
-## Releasing
-
-Push a `v*` tag. [`release.yml`](.github/workflows/release.yml) runs the tests, builds a universal app, publishes a GitHub release and updates the cask in [gergogyulai/homebrew-tap](https://github.com/gergogyulai/homebrew-tap). It uses the `SIGNING_CERT_P12`/`SIGNING_CERT_PASSWORD` secrets from `scripts/make-signing-cert.sh`, so every release keeps the same signing identity and users don't have to grant Bluetooth access again after an update. It also needs a `TAP_TOKEN` secret with write access to the tap.
-
 ## Contribute
 
 This is a personal project, built in the open. Ideas, issues, and PRs are welcome.
