@@ -6,11 +6,32 @@ import "../styles/global.css";
 
 interface Props {
   title?: string;
+  noindex?: boolean;
 }
 
-const { title = "open1000x" } = Astro.props;
+const { title = "open1000x · Sony 1000X headphone control for macOS", noindex = false } =
+  Astro.props;
 const description =
-  "A menu bar app for Sony 1000X headphones. Sound Connect for the Mac, minus the phone.";
+  "A free, open-source menu bar app for Sony WH-1000XM5 and other 1000X headphones. Noise cancelling, EQ, DSEE, Speak-to-Chat and multipoint from your Mac. Sound Connect, minus the phone.";
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const image = new URL("/og.png", Astro.site);
+const imageAlt =
+  "open1000x: Sound Connect for the Mac, minus the phone. The menu bar popover connected to a WH-1000XM5.";
+
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "open1000x",
+  description,
+  url: Astro.site,
+  image,
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "macOS 26",
+  license: "https://github.com/gergogyulai/open1000x/blob/main/LICENSE",
+  codeRepository: "https://github.com/gergogyulai/open1000x",
+  downloadUrl: "https://github.com/gergogyulai/open1000x/releases/latest",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
 ---
 
 <!doctype html>
@@ -20,13 +41,33 @@ const description =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="open1000x" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f1ea" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121110" />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(ld)} />}
   </head>
   <body>
     <slot />

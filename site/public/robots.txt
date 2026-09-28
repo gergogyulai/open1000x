@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://open1000x.gergo.cc/sitemap-index.xml

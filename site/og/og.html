@@ -1,0 +1,96 @@
+<!doctype html>
+<!-- Source for public/og.png. Render with `bun run og`. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Archivo Variable";
+        src: url("../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2") format("woff2");
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      body {
+        position: relative;
+        background: #121110;
+        color: #d8d3c8;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 22px;
+        line-height: 1.5;
+        padding: 72px 80px;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .mark {
+        font-family: "Archivo Variable", sans-serif;
+        font-stretch: 125%;
+        font-weight: 800;
+        font-size: 150px;
+        line-height: 0.86;
+        letter-spacing: -0.035em;
+        margin-bottom: 44px;
+      }
+
+      .mark span {
+        color: #ff6a3d;
+      }
+
+      .lede {
+        font-family: "Archivo Variable", sans-serif;
+        font-stretch: 112%;
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        max-width: 22ch;
+        margin-bottom: 28px;
+      }
+
+      .meta {
+        color: #8f897e;
+      }
+
+      .shot {
+        position: absolute;
+        top: 64px;
+        right: 80px;
+        width: 360px;
+        border-radius: 20px;
+        border: 1px solid #2a2825;
+        box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.35);
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="mark">open<br />1000<span>x</span></h1>
+    <p class="lede">Sound Connect for the Mac, minus the phone.</p>
+    <p class="meta">sony wh-1000xm5 · menu bar · macOS 26+</p>
+    <img class="shot" src="../public/menu-dark.png" alt="" />
+  </body>
+</html>
