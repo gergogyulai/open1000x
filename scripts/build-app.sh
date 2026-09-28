@@ -55,7 +55,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 PLIST
 
 # The controls are a WidgetKit extension, which SwiftPM can't build. Compile it with swiftc and generate
-# the App Intents metadata Xcode would, without which the system can't run the controls' intents.
+# the App Intents metadata Xcode would, without which the system can't run the controls' intents. Like
+# Xcode, link with _NSExtensionMain as the entry point: it sets up the extension and then calls main.
 EXT="$APP/Contents/PlugIns/Open1000XControls.appex"
 WORK=".build/controls"
 SDK="$(xcrun --show-sdk-path)"
@@ -72,6 +73,7 @@ for arch in $ARCHS; do
         -target "$arch-apple-macos26.0" -sdk "$SDK" $OPT -wmo \
         -emit-const-values-path "$WORK/$arch.swiftconstvalues" \
         -Xfrontend -const-gather-protocols-file -Xfrontend "$WORK/protocols.json" \
+        -Xlinker -e -Xlinker _NSExtensionMain \
         $SOURCES -o "$WORK/Open1000XControls-$arch"
 done
 lipo -create "$WORK"/Open1000XControls-* -output "$EXT/Contents/MacOS/Open1000XControls"
