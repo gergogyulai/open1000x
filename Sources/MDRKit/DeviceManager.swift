@@ -85,7 +85,8 @@ public final class DeviceManager {
     }
 }
 
-/// Objective-C target for IOBluetooth's selector-based notifications (delivered on the main thread).
+/// Objective-C target for IOBluetooth's selector-based notifications.
+/// These can arrive on a CoreBluetooth background queue, so the callbacks hop to the main actor.
 @MainActor
 private final class NotificationObserver: NSObject {
     weak var owner: DeviceManager?
@@ -103,14 +104,20 @@ private final class NotificationObserver: NSObject {
         device.register(forDisconnectNotification: self, selector: #selector(disconnected(_:device:)))
     }
 
-    @objc func connected(_ notification: IOBluetoothUserNotification, device: IOBluetoothDevice) {
-        owner?.deviceConnected(device)
+    @objc nonisolated func connected(_ notification: IOBluetoothUserNotification, device: IOBluetoothDevice) {
+        nonisolated(unsafe) let device = device
+        DispatchQueue.main.async {
+            self.owner?.deviceConnected(device)
+        }
     }
 
-    @objc func disconnected(_ notification: IOBluetoothUserNotification, device: IOBluetoothDevice) {
-        owner?.deviceDisconnected(device)
+    @objc nonisolated func disconnected(_ notification: IOBluetoothUserNotification, device: IOBluetoothDevice) {
         notification.unregister()
-        owner?.forgetDisconnectRegistration(for: device)
+        nonisolated(unsafe) let device = device
+        DispatchQueue.main.async {
+            self.owner?.deviceDisconnected(device)
+            self.owner?.forgetDisconnectRegistration(for: device)
+        }
     }
 }
 

@@ -8,7 +8,7 @@ set -eu
 cd "$(dirname "$0")/.."
 
 CONFIG="${CONFIG:-release}"
-VERSION="${VERSION:-0.1.0}"
+VERSION="${VERSION:-0.1.1}"
 APP="build/Open1000X.app"
 BUNDLE_ID="dev.open1000x.app"
 SIGN_IDENTITY="${SIGN_IDENTITY:--}"
